@@ -47,27 +47,55 @@ linksController.createCard = (req, res, next) => {
 
 // delete card will cause delete all links for this card
 
-// linksController.deleteCard = (req, res, next) => {
-// 	console.log('we got card', req.body.card_name);
-// 	const { card_name } = req.body;
-// 	const createCardQuery = 'INSERT INTO card (card_name) VALUES($1)';
-// 	db.query(createCardQuery, [card_name])
-// 			.then((data) => {
-// 					console.log('success', data);
-// 					return next();
-// 			})
-// 			.catch((err) => {
-// 					console.log('err', err);
-// 					return next({
-// 					log:
-// 							"linksController.createCard: ERROR: Error getting card database",
-// 					message: {
-// 							err:
-// 							"linksController.createCard: ERROR: Check card database for details",
-// 					},
-// 					});
-// 			});
-// };
+linksController.deleteCard = (req, res, next) => {
+	console.log('we got card delete', req.query.id);
+	const { id } = req.query;
+
+// 	DELETE messages , usersmessages  FROM messages  INNER JOIN usersmessages  
+// WHERE messages.messageid= usersmessages.messageid and messages.messageid = '1'
+	next();
+
+	// const deleteCardQuery = 'DELETE card , link FROM card INNER JOIN link WHERE card._id = $1 AND link.card_id = $1';
+	// db.query(deleteCardQuery, [id])
+	// 		.then((data) => {
+	// 				console.log('success', data);
+	// 				return next();
+	// 		})
+	// 		.catch((err) => {
+	// 				console.log('err', err);
+	// 				return next({
+	// 				log:
+	// 						"linksController.deleteCard: ERROR: Error deleting card database",
+	// 				message: {
+	// 						err:
+	// 						"linksController.deleteCard: ERROR: Check card database for details",
+	// 				},
+	// 				});
+	// 		});
+};
+
+linksController.updateCard = (req, res, next) => {
+	console.log('we got card update', req.body, req.query.id);
+	const { card_name } = req.body;
+	const { id } = req.query;
+	const updateCardQuery = 'UPDATE card SET card_name = $2 WHERE _id = $1'
+	db.query(updateCardQuery, [id, card_name])
+	.then((data) => {
+		console.log('card update success', data);
+		return next();
+	})
+	.catch((err) => {
+		console.log('err', err);
+      return next({
+        log:
+            "linksController.updateCard: ERROR: Error updating card database",
+        message: {
+            err:
+            "linksController.updateCard: ERROR: Check card database for details",
+        },
+      });
+	});
+}
 
 linksController.createLink = (req, res, next) => {
     console.log('we got link', req.body);
@@ -103,15 +131,15 @@ linksController.deleteLink = (req, res, next) => {
 			return next();
 	})
 	.catch((err) => {
-			console.log('err', err);
-			return next({
+		console.log('err', err);
+		return next({
 			log:
 					"linksController.deleteLink: ERROR: Error deleting link database",
 			message: {
 					err:
 					"linksController.deleteLink: ERROR: Check link database for details",
-			},
-			});
+			}
+		});
 	});
 }
 

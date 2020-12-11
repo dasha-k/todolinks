@@ -16,6 +16,16 @@ router.post('/card',
     (req, res) => res.sendStatus(200)
 );
 
+router.patch('/card', 
+    linksController.updateCard,
+    (req, res) => res.sendStatus(200)
+)
+
+router.delete('/card',
+    linksController.deleteCard,
+    (req, res) => res.sendStatus(200)
+);
+
 router.post('/link',
     linksController.createLink,
     (req, res) => res.sendStatus(200)
