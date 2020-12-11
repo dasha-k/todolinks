@@ -8,8 +8,23 @@ const AddCard = () => {
         setCardTitle(event.target.value);
     }
     
-    const handleSubmit = () => {
+    const handleSubmit = (event) => {
+        event.preventDefault();
         // send post request with new card
+        fetch('/api/card', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "Application/JSON"
+            },
+            body: JSON.stringify({'card_name': cardTitle})
+        })
+        .then(resp => resp.json())
+        .then(data => {
+            console.log(data);
+            setIsForm(false);
+            setCardTitle('');
+        })
+        .catch(err => console.log('CreateCharacter fetch /api/card: ERROR: ', err));
     }
 
     const showForm = () => {

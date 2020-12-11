@@ -1,0 +1,15 @@
+.filtersList {
+    display: flex;
+    list-style-type: none;
+}
+
+
+.filterLink {
+    color: grey;
+    padding: 15px;
+
+    &.active {
+        color: rgb(32, 31, 31);
+    }
+}
+
