@@ -21,5 +21,10 @@ router.post('/link',
     (req, res) => res.status(200).json([])
 );
 
+router.delete('/link',
+    linksController.deleteLink,
+    (req, res) => res.sendStatus(200)
+);
+
 module.exports = router;
 

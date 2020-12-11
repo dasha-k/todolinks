@@ -4,7 +4,7 @@ const linksController = {};
 
 linksController.getAll = (req, res, next) => {
   console.log('we got all');
-  const getLinksQuery = 'SELECT card_name, * FROM card LEFT OUTER JOIN link ON link.card_id = card._id LIMIT 5'; 
+  const getLinksQuery = 'SELECT card_name, * FROM card LEFT OUTER JOIN link ON link.card_id = card._id'; 
   db.query(getLinksQuery)
     .then((data) => {
       console.log(data.rows);
@@ -45,6 +45,30 @@ linksController.createCard = (req, res, next) => {
         });
 };
 
+// delete card will cause delete all links for this card
+
+// linksController.deleteCard = (req, res, next) => {
+// 	console.log('we got card', req.body.card_name);
+// 	const { card_name } = req.body;
+// 	const createCardQuery = 'INSERT INTO card (card_name) VALUES($1)';
+// 	db.query(createCardQuery, [card_name])
+// 			.then((data) => {
+// 					console.log('success', data);
+// 					return next();
+// 			})
+// 			.catch((err) => {
+// 					console.log('err', err);
+// 					return next({
+// 					log:
+// 							"linksController.createCard: ERROR: Error getting card database",
+// 					message: {
+// 							err:
+// 							"linksController.createCard: ERROR: Check card database for details",
+// 					},
+// 					});
+// 			});
+// };
+
 linksController.createLink = (req, res, next) => {
     console.log('we got link', req.body);
     const { link_name, link, is_read, is_important, card_id } = req.body;
@@ -66,7 +90,29 @@ linksController.createLink = (req, res, next) => {
         },
         });
     });
-    //return next();
+}
+
+linksController.deleteLink = (req, res, next) => {
+	console.log('we got link delete', req.query, req.query.id);
+	const { id } = req.query;
+
+	const deleteLinkQuery = 'DELETE FROM link WHERE _id = $1'
+	db.query(deleteLinkQuery, [id])
+	.then((data) => {
+			console.log('success', data);
+			return next();
+	})
+	.catch((err) => {
+			console.log('err', err);
+			return next({
+			log:
+					"linksController.createLink: ERROR: Error getting link database",
+			message: {
+					err:
+					"linksController.createLink: ERROR: Check link database for details",
+			},
+			});
+	});
 }
 
 module.exports = linksController;
