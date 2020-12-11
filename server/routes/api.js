@@ -13,16 +13,21 @@ router.get('/',
 
 router.post('/card', 
     linksController.createCard,
-    (req, res) => res.status(200).json([])
+    (req, res) => res.sendStatus(200)
 );
 
 router.post('/link',
     linksController.createLink,
-    (req, res) => res.status(200).json([])
+    (req, res) => res.sendStatus(200)
 );
 
 router.delete('/link',
     linksController.deleteLink,
+    (req, res) => res.sendStatus(200)
+);
+
+router.patch('/link',
+    linksController.updateLink,
     (req, res) => res.sendStatus(200)
 );
 

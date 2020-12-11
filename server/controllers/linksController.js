@@ -106,10 +106,36 @@ linksController.deleteLink = (req, res, next) => {
 			console.log('err', err);
 			return next({
 			log:
-					"linksController.createLink: ERROR: Error getting link database",
+					"linksController.deleteLink: ERROR: Error deleting link database",
 			message: {
 					err:
-					"linksController.createLink: ERROR: Check link database for details",
+					"linksController.deleteLink: ERROR: Check link database for details",
+			},
+			});
+	});
+}
+
+linksController.updateLink = (req, res, next) => {
+	console.log('we got link update', req.body, req.query.id);
+	const { id } = req.query;
+	// update is_read or is_important
+	// get update data from req body 
+	const { is_read, is_important } = req.body;
+  const linkArr = [id, is_read, is_important];
+	const updateLinkQuery = 'UPDATE link SET is_read = $2, is_important = $3 WHERE _id = $1'
+	db.query(updateLinkQuery, linkArr)
+	.then((data) => {
+			console.log('success', data);
+			return next();
+	})
+	.catch((err) => {
+			console.log('err', err);
+			return next({
+			log:
+					"linksController.updateLink: ERROR: Error updating link database",
+			message: {
+					err:
+					"linksController.updateLink: ERROR: Check link database for details",
 			},
 			});
 	});
