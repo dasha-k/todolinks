@@ -1,8 +1,11 @@
+.filtersContainer {
+    display: flex;
+    margin-right: 15px;
+}
 .filtersList {
     display: flex;
     list-style-type: none;
 }
-
 
 .filterLink {
     color: grey;

@@ -1,12 +1,12 @@
 import React from 'react';
 
-import Filters from './Filters';
+import Header from './Header';
 import CardsContainer from './CardsContainer';
 
 const App = () => {
     return (
         <>  
-            <Filters />
+            <Header />
             <CardsContainer />
         </>
     )

@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import Link from './Link.js';
+
+import DeleteSvg from './svg/close.svg';
 
 const AddLink = ({card_id}) => {
     const [link, setLink] = useState('');
@@ -69,12 +72,20 @@ const AddLink = ({card_id}) => {
 
 const LinksCard = ({card_name, links, _id}) => {
     return (
-        <div>
-            <h2>{card_name}</h2>
+        <div className="linksCard">
+            <div className="linksCard__header">
+                <h2 className="linksCard__title">{card_name}</h2>
+                <textarea className="linksCard__textarea" rows="1">{card_name}</textarea>
+                <button className="btn-svg linksCard__delete" aria-label="Delete card">
+                    <DeleteSvg />
+                </button>
+            </div>
             <ul>
-                {links.map(el => <li key={el._id}><a target="_blank" href={el.link}>{el.link_name}</a></li>)}
+                {links.map(el => <Link key={el._id} {...el}/>)}
             </ul>
-            <AddLink card_id={_id} />
+            {links.length < 5 &&
+                <AddLink card_id={_id} />
+            }
         </div>
     )
 }

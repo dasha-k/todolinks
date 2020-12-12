@@ -28,6 +28,10 @@ module.exports = {
                 }
             },
             {
+                test: /\.svg$/,
+                use: ['@svgr/webpack'],
+            },
+            {
                 test: /\.scss$/,
                 use: [
                     process.env.NODE_ENV !== 'production' ? 'style-loader' : MiniCssExtractPlugin.loader,

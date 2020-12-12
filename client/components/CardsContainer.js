@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
 import LinksCard from './LinksCard';
-import AddCard from './AddCard';
 
 const fakeLinks = {
     'Browser rendering': {
@@ -77,7 +76,6 @@ const CardsContainer = () => {
                 </>
                 : <div>loading...</div>
             }
-            <AddCard />
         </div>
     )
 }

@@ -10,14 +10,14 @@ const Filter = ({filterName, current}) => {
 const Filters = () => {
     const [currFilter, setCurrFilter] = useState('all');
     return (
-        <>
-            <h4>Filter by</h4>
+        <div className="filtersContainer">
+            <span className="filtersHeader">Filter by:</span>
             <ul className="filtersList">
                 {filters.map((el, index) => {
-                    return <Filter filterName={el} current={currFilter} key={el + index}/>
+                    return <Filter filterName={el} current={currFilter} setCurrFilter={setCurrFilter} key={el + index}/>
                 })}
             </ul>
-        </>
+        </div>
     )
 }
 

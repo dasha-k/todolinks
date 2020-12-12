@@ -20,7 +20,7 @@ const AddCard = () => {
         })
         .then(resp => resp.json())
         .then(data => {
-            console.log(data);
+            console.log('add card success', data);
             setIsForm(false);
             setCardTitle('');
         })
