@@ -4,7 +4,7 @@ const linksController = {};
 
 linksController.getAll = (req, res, next) => {
   console.log('we got all');
-  const getLinksQuery = 'SELECT card_name, * FROM card LEFT OUTER JOIN link ON link.card_id = card._id'; 
+  const getLinksQuery = 'SELECT card_name, card._id as cardid, * FROM card LEFT JOIN link ON link.card_id = card._id'; 
   db.query(getLinksQuery)
     .then((data) => {
       console.log(data.rows);
@@ -98,8 +98,9 @@ linksController.updateCard = (req, res, next) => {
 }
 
 linksController.createLink = (req, res, next) => {
-    console.log('we got link', req.body);
-    const { link_name, link, is_read, is_important, card_id } = req.body;
+    // console.log('we got link', req.body);
+	const { link, is_read, is_important, card_id } = req.body;
+	const { link_name } = res.locals;
     const linkArr = [link_name, link, is_read, is_important, card_id];
     const createLinkQuery = 'INSERT INTO link (link_name, link, is_read, is_important, card_id) VALUES($1, $2, $3, $4, $5)';
     db.query(createLinkQuery, linkArr)

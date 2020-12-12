@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import Link from './Link.js';
 
 import DeleteSvg from './svg/close.svg';
@@ -7,20 +8,24 @@ const AddLink = ({card_id}) => {
     const [link, setLink] = useState('');
     const [isForm, setIsForm] = useState(false);
 
+    //const history = useHistory();
+
     const handleChange = (event) => {
+        console.log('call handle change', event.target.value);
         setLink(event.target.value);
     }
 
-    const handlePaste = (event) => {
-        const link = event.clipboardData.getData('text/plain')
-        setLink(link);
-    };
+    // const handlePaste = (event) => {
+    //     const link = event.clipboardData.getData('text/plain')
+    //    // setLink(link);
+    //     console.log('handle paste', link);
+    // };
     
     const handleSubmit = (event) => {
+        console.log('hanle submit', link);
         event.preventDefault();
         // retrive title from link somehow 
         const linkObject = {
-            link_name: "Fake title",
             link,
             is_read: false,
             is_important: false,
@@ -39,6 +44,8 @@ const AddLink = ({card_id}) => {
             console.log(data);
             setLink('');
             setIsForm(false);
+           
+            window.history.go('/');
         })
         .catch(err => console.log('CreateLink fetch /api/link: ERROR: ', err));
     }
@@ -57,7 +64,10 @@ const AddLink = ({card_id}) => {
             {isForm 
                 ? (
                     <form onSubmit={handleSubmit}>
-                        <input type="text" placeholder="Enter link" value={link} onChange={handleChange} onPaste={handlePaste}/>
+                        <input type="text" placeholder="Enter link" value={link} 
+                            onChange={handleChange} 
+                            //onPaste={handlePaste}
+                        />
                         <div>
                             <input type="submit" value="Add Link"/>
                             <button onClick={hideForm}>X</button>

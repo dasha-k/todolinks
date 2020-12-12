@@ -1,13 +1,13 @@
 const express = require('express');
 
 const linksController = require('../controllers/linksController');
-const cardsController = require('../controllers/cardsController');
+const helpers = require('../controllers/helpers');
 
 const router = express.Router();
 
 router.get('/', 
     linksController.getAll,
-    cardsController.sort,
+    helpers.sort,
     (req, res) => res.status(200).json(res.locals.cards)
 );
 
@@ -27,8 +27,9 @@ router.delete('/card',
 );
 
 router.post('/link',
+    helpers.getTitle,
     linksController.createLink,
-    (req, res) => res.sendStatus(200)
+    (req, res) => res.status(200).json({})
 );
 
 router.delete('/link',
