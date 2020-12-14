@@ -4,11 +4,11 @@ import AddCard from './AddCard';
 
 const appHeader = "Todolinks";
 
-const Header = () => {
+const Header = ({currFilter, setCurrFilter}) => {
     return (
         <header>
             <h1>{appHeader}</h1>
-            <Filters />
+            <Filters currFilter={currFilter} setCurrFilter={setCurrFilter}/>
             <AddCard />
         </header>
     )

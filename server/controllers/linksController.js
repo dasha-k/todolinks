@@ -3,11 +3,26 @@ const db = require("../models/linkModels");
 const linksController = {};
 
 linksController.getAll = (req, res, next) => {
-  console.log('we got all');
-  const getLinksQuery = 'SELECT card_name, card._id as cardid, * FROM card LEFT JOIN link ON link.card_id = card._id'; 
+  const { tag } = req.query;
+  console.log('we got all', tag);
+  let getLinksQuery;
+  switch(tag) {
+	case(undefined):
+	default: 
+		getLinksQuery = 'SELECT card_name, card._id as cardid, * FROM card LEFT JOIN link ON link.card_id = card._id'; 
+		break;
+	case('is_read'): //WHERE link.is_read = true
+		getLinksQuery = 'SELECT card_name, card._id as cardid, * FROM card LEFT JOIN link ON link.card_id = card._id WHERE link.is_read = true'; 
+		break;
+	case('is_important'):
+		getLinksQuery = 'SELECT card_name, card._id as cardid, * FROM card LEFT JOIN link ON link.card_id = card._id WHERE link.is_important = true';
+		break;
+  }
+
+  //const getLinksQuery = 'SELECT card_name, card._id as cardid, * FROM card LEFT JOIN link ON link.card_id = card._id'; 
   db.query(getLinksQuery)
     .then((data) => {
-      console.log(data.rows);
+      //console.log(data.rows);
       res.locals.links = data.rows;
       return next();
     })
@@ -53,25 +68,25 @@ linksController.deleteCard = (req, res, next) => {
 
 // 	DELETE messages , usersmessages  FROM messages  INNER JOIN usersmessages  
 // WHERE messages.messageid= usersmessages.messageid and messages.messageid = '1'
-	next();
+	//next();
 
-	// const deleteCardQuery = 'DELETE card , link FROM card INNER JOIN link WHERE card._id = $1 AND link.card_id = $1';
-	// db.query(deleteCardQuery, [id])
-	// 		.then((data) => {
-	// 				console.log('success', data);
-	// 				return next();
-	// 		})
-	// 		.catch((err) => {
-	// 				console.log('err', err);
-	// 				return next({
-	// 				log:
-	// 						"linksController.deleteCard: ERROR: Error deleting card database",
-	// 				message: {
-	// 						err:
-	// 						"linksController.deleteCard: ERROR: Check card database for details",
-	// 				},
-	// 				});
-	// 		});
+	const deleteCardQuery = 'DELETE FROM card WHERE card._id = $1';
+	db.query(deleteCardQuery, [id])
+			.then((data) => {
+					console.log('success', data);
+					return next();
+			})
+			.catch((err) => {
+					console.log('err', err);
+					return next({
+					log:
+							"linksController.deleteCard: ERROR: Error deleting card database",
+					message: {
+							err:
+							"linksController.deleteCard: ERROR: Check card database for details",
+					},
+					});
+			});
 };
 
 linksController.updateCard = (req, res, next) => {
