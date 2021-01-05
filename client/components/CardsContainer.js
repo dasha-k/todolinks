@@ -1,52 +1,36 @@
 import React, { useState, useEffect } from 'react';
+import AddCard from './AddCard';
 
 import LinksCard from './LinksCard';
 
-const fakeLinks = {
-    'Browser rendering': {
-        card_name: 'Browser rendering',
-        _id: 1,
-        links: [
-            {
-                'link_name': "How the browser renders HTML & CSS",
-                'link': 'https://medium.com/@mustafa.abdelmogoud/how-the-browser-renders-html-css-27920d8ccaa6',
-                '_id': 1,
-                'isRead': false,
-                'isImportant': false
-            },
-            {
-                'link_name': "name",
-                'link': 'link',
-                '_id': 2,
-                'isRead': false,
-                'isImportant': false
-            },
-            {
-                'link_name': "name",
-                'link': 'link',
-                '_id': 3,
-                'isRead': false,
-                'isImportant': false
-            }
-        ]
-    },
-    'Promises': {   
-        card_name: 'Promises',
-        _id: 2,
-        links: [
-            {
-                'link_name': "Understanding promises in JavaScript",
-                'link': 'link',
-                '_id': 1,
-                'isRead': false,
-                'isImportant': false
-            }
-        ]
-    }
-}
-
 const CardsContainer = ({currFilter}) => {
     const [cards, setCards] = useState(null);
+    const [error, setError] = useState(false);
+
+    let statusCode = 200;
+
+    const handleOptimisticUpdate = (cardTitle) => {
+        // run before database updated
+        // put new card in state with 0 id
+        const newCardObj = {
+            _id: 0,
+            card_name: cardTitle,
+            links: []
+        }
+        const updatedCards = [...cards, newCardObj]
+        //updatedCards["0"] = newCardObj;
+        setCards(updatedCards);
+    }
+
+    const handleCardsUpdate = (card = null) => {
+        // run when database in successfully updated
+        console.log('handle update', card);
+        const newCard = {...card, links: []}
+        const updatedCards = cards.filter(obj => obj._id !== 0);
+        if(card) updatedCards.push(newCard);
+            
+        setCards(updatedCards);
+    }
 
     useEffect(() => {
         console.log('container mount', currFilter);
@@ -66,32 +50,43 @@ const CardsContainer = ({currFilter}) => {
                 break;
         }
         fetch(url)
-            .then(res => res.json())
+            .then((res) => { 
+                statusCode = res.status;
+                return res.json()
+            })
             .then((data) => {
-                console.log(data);
+                console.log('data', data);
                 // return this.setState({
                 // characters,
                 // fetchedChars: true
                 // });
-                return setCards(data);
+                if(statusCode === 200) {
+                    return setCards(data);
+                } else {
+                    return setError(true);
+                }
             })
-            .catch(err => console.log('Cards.useEffect: get characters: ERROR: ', err));
+            .catch((err) => {
+                console.log('Cards.useEffect: get characters: ERROR: ', err);
+                return setError(true);
+            });
     }, [currFilter]);
 
     return (
         <div className='cardsContainer'>
             {cards
                 ? <>
-                    {Object.keys(cards).map(cardName => {
-                        const card = cards[cardName];
-                        //console.log('render', card);
+                    {cards.map(card => {
+                        console.log('render', card);
                         return (
-                            <LinksCard {...card} key={card._id} />
+                            <LinksCard {...card} key={card._id} optimistic={card._id === 0}/>
                         )
                     })}
+                    <AddCard handleOptimisticUpdate={handleOptimisticUpdate} handleCardsUpdate={handleCardsUpdate}/>
                 </>
                 : <div>loading...</div>
             }
+            {error && <div>Something went wrong, we could not fetch your links</div>}
         </div>
     )
 }

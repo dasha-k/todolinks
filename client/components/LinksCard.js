@@ -8,6 +8,7 @@ const AddLink = ({card_id}) => {
     const [link, setLink] = useState('');
     const [isForm, setIsForm] = useState(false);
 
+    console.log('card id', card_id);
     //const history = useHistory();
 
     const handleChange = (event) => {
@@ -80,7 +81,7 @@ const AddLink = ({card_id}) => {
     )
 }
 
-const LinksCard = ({card_name, links, _id}) => {
+const LinksCard = ({card_name, links, _id, optimistic}) => {
 
     const [value, setValue] = useState(card_name);
 
@@ -126,7 +127,7 @@ const LinksCard = ({card_name, links, _id}) => {
     }
 
     return (
-        <div className="linksCard">
+        <div className={optimistic ? "linksCard linksCard__optimistic" : "linksCard"}>
             <div className="linksCard__header">
                 <h2 className="linksCard__title">{card_name}</h2>
                 <textarea className="linksCard__textarea" rows="1" value={value} onChange={handleChange} onKeyDown={handleKeyDown}></textarea>

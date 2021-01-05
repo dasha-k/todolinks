@@ -13,7 +13,7 @@ router.get('/',
 
 router.post('/card', 
     linksController.createCard,
-    (req, res) => res.sendStatus(200)
+    (req, res) => res.status(200).json(res.locals.newCard)
 );
 
 router.patch('/card', 

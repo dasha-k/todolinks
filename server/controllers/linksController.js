@@ -41,10 +41,11 @@ linksController.getAll = (req, res, next) => {
 linksController.createCard = (req, res, next) => {
     console.log('we got card', req.body.card_name);
     const { card_name } = req.body;
-    const createCardQuery = 'INSERT INTO card (card_name) VALUES($1)';
+    const createCardQuery = 'INSERT INTO card (card_name) VALUES($1) RETURNING *';
     db.query(createCardQuery, [card_name])
         .then((data) => {
-            console.log('success', data);
+			console.log('success', data);
+			res.locals.newCard = data.rows[0];
             return next();
         })
         .catch((err) => {
@@ -114,10 +115,10 @@ linksController.updateCard = (req, res, next) => {
 
 linksController.createLink = (req, res, next) => {
     // console.log('we got link', req.body);
-	const { link, is_read, is_important, card_id } = req.body;
+	const { link: link_src, is_read, is_important, card_id } = req.body;
 	const { link_name } = res.locals;
-    const linkArr = [link_name, link, is_read, is_important, card_id];
-    const createLinkQuery = 'INSERT INTO link (link_name, link, is_read, is_important, card_id) VALUES($1, $2, $3, $4, $5)';
+    const linkArr = [link_name, link_src, card_id];
+    const createLinkQuery = 'INSERT INTO link (link_name, link_src, card_id) VALUES($1, $2, $3)';
     db.query(createLinkQuery, linkArr)
     .then((data) => {
         console.log('success', data);

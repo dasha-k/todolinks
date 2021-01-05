@@ -28,9 +28,10 @@ helpers.sort = (req, res, next) => {
             }
         }
     });
-    res.locals.cards = cards;
-    console.log('cards', cards);
-    next();
+    const cardsArray = Object.values(cards); // need array on client side 
+    res.locals.cards = cardsArray;
+    console.log('cards', cardsArray);
+    return next();
 }
 
 helpers.getTitle = (req, res, next) => {

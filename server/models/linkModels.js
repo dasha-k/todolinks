@@ -1,8 +1,7 @@
 const { Pool } = require('pg');
 
-
-
 // create a new pool here using the connection string above
+console.log('pg uri', process.env.PG_URI);
 const pool = new Pool({
   connectionString: process.env.PG_URI
 });

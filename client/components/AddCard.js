@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 
-const AddCard = () => {
+const AddCard = ({handleOptimisticUpdate, handleCardsUpdate}) => {
     const [cardTitle, setCardTitle] = useState('');
     const [isForm, setIsForm] = useState(false);
 
@@ -11,18 +11,29 @@ const AddCard = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
         // send post request with new card
+        const card_name = cardTitle;
+        handleOptimisticUpdate(card_name);
+        setIsForm(false);
+        setCardTitle('');
+        let statusCode = 200;
         fetch('/api/card', {
             method: 'POST',
             headers: {
                 "Content-Type": "Application/JSON"
             },
-            body: JSON.stringify({'card_name': cardTitle})
+            body: JSON.stringify({card_name})
         })
-        .then(resp => resp.json())
+        .then(resp => {
+            statusCode = resp.status;
+            return resp.json();
+        })
         .then(data => {
             console.log('add card success', data);
-            setIsForm(false);
-            setCardTitle('');
+            if(statusCode === 200) {
+                handleCardsUpdate(data);
+            } else {
+                handleCardsUpdate();
+            }
         })
         .catch(err => console.log('CreateCharacter fetch /api/card: ERROR: ', err));
     }
@@ -37,7 +48,7 @@ const AddCard = () => {
     }
 
     return (
-        <div>
+        <div className="addCard">
             {isForm 
                 ? (
                     <form onSubmit={handleSubmit}>
