@@ -1,9 +1,10 @@
 const { Pool } = require('pg');
 
 // create a new pool here using the connection string above
-console.log('pg uri', process.env.PG_URI);
+// DB_URI for redesign branch
+// PG_URI for main branch
 const pool = new Pool({
-  connectionString: process.env.PG_URI
+  connectionString: process.env.DB_URI
 });
 
 // Adding some notes about the database here will be helpful for future you or other developers.

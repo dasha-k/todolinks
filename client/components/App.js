@@ -1,19 +1,14 @@
 import React, { useState } from 'react';
 
 import Header from './Header';
-import CardsContainer from './CardsContainer';
+import LinksContainer from './LinksContainer';
 
 const App = () => {
-
-    const [currFilter, setCurrFilter] = useState('all');
-
-    const changeFilter = (tag) => setCurrFilter(tag);
-    
     return (
-        <>  
-            <Header currFilter={currFilter} setCurrFilter={changeFilter}/>
-            <CardsContainer currFilter={currFilter}/>
-        </>
+        <div style={{maxWidth: '1200px', margin: '0 auto'}}>  
+            <Header/>
+            <LinksContainer/>
+        </div>
     )
 }
 

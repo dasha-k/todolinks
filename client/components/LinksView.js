@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import AddCard from './AddCard';
 
-import LinksCard from './LinksCard';
+import LinkCard from './LinkCard';
 
-const CardsContainer = ({currFilter}) => {
-    const [cards, setCards] = useState(null);
+const LinksView = ({currTag}) => {
+    const [links, setLinks] = useState(null);
     const [error, setError] = useState(false);
 
     let statusCode = 200;
@@ -33,9 +32,9 @@ const CardsContainer = ({currFilter}) => {
     }
 
     useEffect(() => {
-        console.log('container mount', currFilter);
+        console.log('container mount', currTag);
         let url = '';
-        switch(currFilter) {
+        switch(currTag) {
             case('all'):
             default: 
                 url = '/api/';
@@ -61,7 +60,7 @@ const CardsContainer = ({currFilter}) => {
                 // fetchedChars: true
                 // });
                 if(statusCode === 200) {
-                    return setCards(data);
+                    return setLinks(data);
                 } else {
                     return setError(true);
                 }
@@ -70,19 +69,19 @@ const CardsContainer = ({currFilter}) => {
                 console.log('Cards.useEffect: get characters: ERROR: ', err);
                 return setError(true);
             });
-    }, [currFilter]);
+    }, [currTag]);
 
     return (
         <div className='cardsContainer'>
-            {cards
+            {links
                 ? <>
-                    {cards.map(card => {
-                        console.log('render', card);
+                    {links.map(link => {
+                        console.log('render', link);
                         return (
-                            <LinksCard {...card} key={card._id} optimistic={card._id === 0}/>
+                            <LinkCard {...link} key={link._id} optimistic={link._id === 0}/>
                         )
                     })}
-                    <AddCard handleOptimisticUpdate={handleOptimisticUpdate} handleCardsUpdate={handleCardsUpdate}/>
+                    {/* <AddCard handleOptimisticUpdate={handleOptimisticUpdate} handleCardsUpdate={handleCardsUpdate}/> */}
                 </>
                 : <div>loading...</div>
             }
@@ -91,4 +90,4 @@ const CardsContainer = ({currFilter}) => {
     )
 }
 
-export default CardsContainer;
+export default LinksView;
