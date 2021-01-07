@@ -6,8 +6,8 @@ const appHeader = "Todolinks";
 const Header = ({currFilter, setCurrFilter}) => {
     return (
         <header>
-            <h1>{appHeader}</h1>
-            <Filters currFilter={currFilter} setCurrFilter={setCurrFilter}/>
+            <h1 className="header__title">{appHeader}</h1>
+            <span>Hello, User</span>
         </header>
     )
 }

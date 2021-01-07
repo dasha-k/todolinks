@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import LinkCard from './LinkCard';
+import AddLink from './AddLink';
 
 const LinksView = ({currTag}) => {
     const [links, setLinks] = useState(null);
@@ -73,6 +74,7 @@ const LinksView = ({currTag}) => {
 
     return (
         <div className='cardsContainer'>
+            <AddLink />
             {links
                 ? <>
                     {links.map(link => {

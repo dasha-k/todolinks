@@ -11,7 +11,6 @@ const LinksContainer = () => {
     return (
         <>
             <TagsView currTag={currTag} changeTag={changeTag} />
-            <AddLink />
             <LinksView currTag={currTag} />
         </>
     )
