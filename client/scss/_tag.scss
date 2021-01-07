@@ -9,16 +9,29 @@
   align-items: center;
 }
 
-.tagItem {
+.tagLink {
   padding: 5px 10px;
   border: 1px solid;
   border-radius: 3px;
   margin: 0 10px 10px 0;
+  text-transform: uppercase;
+  box-sizing: content-box;
+  font-size: .75rem;
+  cursor: pointer;
+}
 
-  .tagLink {
-    text-transform: uppercase;
-    box-sizing: content-box;
-    font-size: .75rem;
-  }
+.tagsPopup {
+  position: absolute;
+  left: 0;
+  background: rgba(0, 0, 0, .5);
+  top: 100%;
+  padding: 10px;
+  height: 100%;
+  overflow: hidden;
+}
+
+.tagsPopup__list {
+  overflow: auto;
+  height: 100%;
 }
 

@@ -55,7 +55,7 @@ const AddLink = ( ) => {
     }
 
     return (
-        <div>
+        <div className="linkCard">
             {isForm 
                 ? (
                     <form onSubmit={handleSubmit}>

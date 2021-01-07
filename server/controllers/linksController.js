@@ -9,7 +9,7 @@ linksController.getAll = (req, res, next) => {
   switch(tag) {
 	case(undefined):
 	default: 
-		getLinksQuery = 'SELECT * FROM link'; 
+		getLinksQuery = 'SELECT *, tag_name, tag_color FROM link LEFT JOIN tag ON link.tag_id = tag._id'; 
 		break;
 	case('is_read'): //WHERE link.is_read = true
 		getLinksQuery = 'SELECT card_name, card._id as cardid, * FROM card LEFT JOIN link ON link.card_id = card._id WHERE link.is_read = true'; 
@@ -89,9 +89,9 @@ linksController.updateLink = (req, res, next) => {
 	const { id } = req.query;
 	// update is_read or is_important
 	// get update data from req body 
-	const { is_read, is_important } = req.body;
-  const linkArr = [id, is_read, is_important];
-	const updateLinkQuery = 'UPDATE link SET is_read = $2, is_important = $3 WHERE _id = $1'
+	const { tag_id } = req.body;
+  const linkArr = [id, tag_id];
+	const updateLinkQuery = 'UPDATE link SET tag_id = $2 WHERE _id = $1'
 	db.query(updateLinkQuery, linkArr)
 	.then((data) => {
 			console.log('success', data);
