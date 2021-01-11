@@ -1,9 +1,8 @@
 import React from 'react';
-import Filters from './Filters';
 
 const appHeader = "Todolinks";
 
-const Header = ({currFilter, setCurrFilter}) => {
+const Header = () => {
     return (
         <header>
             <h1 className="header__title">{appHeader}</h1>

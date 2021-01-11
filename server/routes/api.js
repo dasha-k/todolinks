@@ -13,7 +13,7 @@ router.get('/',
 router.post('/link',
     helpers.getTitle,
     linksController.createLink,
-    (req, res) => res.status(200).json({})
+    (req, res) => res.status(200).json(res.locals.link)
 );
 
 router.delete('/link',

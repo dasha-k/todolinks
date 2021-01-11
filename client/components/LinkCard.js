@@ -1,15 +1,13 @@
-import React, { useState, useCallback } from 'react';
+import React from 'react';
 
 import DeleteSvg from './svg/close.svg';
 import TagsPopup from './TagsPopup';
 import Tag from './Tag';
 
-const LinkCard = ({link_name, link_src, tag_id, tag_color, tag_name, _id, optimistic}) => {
-  const [tagsModal, setTagsModal] = useState(false);
+import {useToggle} from '../helpers';
 
-  const toggleTagsModal = useCallback(() => {
-    setTagsModal(tagsModal => !tagsModal);
-  }, []);
+const LinkCard = ({link_name, link_src, tag_id, tag_color, tag_name, _id, optimistic}) => {
+  const [isModal, toggleIsModal] = useToggle();
 
     const source = "source.com";
 
@@ -54,9 +52,9 @@ const LinkCard = ({link_name, link_src, tag_id, tag_color, tag_name, _id, optimi
             </a>   
             <div className="linkCard__actions">
                 {/* <button>Copy link</button> */}
-                {tag_id ? <Tag tag_name={tag_name} tag_color={tag_color} _id={tag_id} action={toggleTagsModal}/> : <button onClick={toggleTagsModal}>Add tag</button>}
+                {tag_id ? <Tag tag_name={tag_name} tag_color={tag_color} _id={tag_id} action={toggleIsModal}/> : <button onClick={toggleIsModal}>Add tag</button>}
             </div>
-            {tagsModal && <TagsPopup linkId={_id} tagId={tag_id} updateLinkWithTag={updateLinkWithTag}/>}
+            {isModal && <TagsPopup linkId={_id} tagId={tag_id} updateLinkWithTag={updateLinkWithTag}/>}
         </div>
     )
 }

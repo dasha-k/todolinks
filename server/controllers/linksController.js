@@ -5,21 +5,13 @@ const linksController = {};
 linksController.getAll = (req, res, next) => {
   const { tag } = req.query;
   console.log('we got all', tag);
-  let getLinksQuery;
-  switch(tag) {
-	case(undefined):
-	default: 
-		getLinksQuery = 'SELECT *, tag_name, tag_color FROM link LEFT JOIN tag ON link.tag_id = tag._id'; 
-		break;
-	case('is_read'): //WHERE link.is_read = true
-		getLinksQuery = 'SELECT card_name, card._id as cardid, * FROM card LEFT JOIN link ON link.card_id = card._id WHERE link.is_read = true'; 
-		break;
-	case('is_important'):
-		getLinksQuery = 'SELECT card_name, card._id as cardid, * FROM card LEFT JOIN link ON link.card_id = card._id WHERE link.is_important = true';
-		break;
-  }
+  const getLinksQuery = tag 
+    ? 'SELECT link_name, link_src, tag_id, link._id as _id, tag_name, tag_color FROM link LEFT JOIN tag ON link.tag_id = tag._id WHERE link.tag_id = $1 ORDER BY link._id DESC' 
+    : 'SELECT link_name, link_src, tag_id, link._id as _id, tag_name, tag_color FROM link LEFT JOIN tag ON link.tag_id = tag._id ORDER BY link._id DESC';
 
-  db.query(getLinksQuery)
+  const arrayWithValues = tag ? [tag] : [];
+
+  db.query(getLinksQuery, arrayWithValues)
     .then((data) => {
       //console.log(data.rows);
       res.locals.links = data.rows;
@@ -42,10 +34,11 @@ linksController.createLink = (req, res, next) => {
 	const { link_src, tag_id } = req.body;
 	const { link_name } = res.locals;
     const linkArr = [link_name, link_src, tag_id];
-    const createLinkQuery = 'INSERT INTO link (link_name, link_src, tag_id) VALUES($1, $2, $3)';
+    const createLinkQuery = 'INSERT INTO link (link_name, link_src, tag_id) VALUES($1, $2, $3) RETURNING *';
     db.query(createLinkQuery, linkArr)
     .then((data) => {
         console.log('success', data);
+        res.locals.link = data.rows[0];
         return next();
     })
     .catch((err) => {
@@ -85,7 +78,7 @@ linksController.deleteLink = (req, res, next) => {
 }
 
 linksController.updateLink = (req, res, next) => {
-	console.log('we got link update', req.body, req.query.id);
+	console.log('we got link update', req.body, req.query, req.query.id);
 	const { id } = req.query;
 	// update is_read or is_important
 	// get update data from req body 

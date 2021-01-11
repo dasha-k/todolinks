@@ -1,10 +1,12 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
+
+import { TagsContext } from './LinksContainer';
 
 const AddLink = ( ) => {
     const [link, setLink] = useState('');
     const [isForm, setIsForm] = useState(false);
 
-    
+    const {links, setLinks} = useContext(TagsContext);
     //const history = useHistory();
 
     const handleChange = (event) => {
@@ -21,6 +23,13 @@ const AddLink = ( ) => {
     const handleSubmit = (event) => {
         console.log('hanle submit', link);
         event.preventDefault();
+
+        // make optimistic update for links state with new link
+        const newLink = { link_src: link, tag_id: null, link_name: '', _id: 0}
+        //const newLinks = [newLink, ...links];
+        setLinks(links => [newLink, ...links]);
+        setLink('');
+        setIsForm(false);
         // retrive title from link somehow 
         const linkObject = {
             link_src: link,
@@ -36,11 +45,11 @@ const AddLink = ( ) => {
         })
         .then(resp => resp.json())
         .then(data => {
-            console.log(data);
-            setLink('');
-            setIsForm(false);
-           
-            window.history.go('/');
+            console.log('success', data);
+            const newLinks = [...links];
+            newLinks[0] = data;
+            setLinks(newLinks);
+            
         })
         .catch(err => console.log('CreateLink fetch /api/link: ERROR: ', err));
     }
