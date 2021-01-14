@@ -27,7 +27,7 @@ export const createLink = (payload) => [
   }
 ];
 
-export const updateLink = (linkId, payload) => [
+export const patchLink = (linkId, payload) => [
   createUrl(BASE_URL, `/link/?id=${linkId}`),
   {
     method: "PATCH",
@@ -38,7 +38,7 @@ export const updateLink = (linkId, payload) => [
   }
 ]
 
-export const deleteLink = (linkId) => [
+export const removeLink = (linkId) => [
   createUrl(BASE_URL, `/link/?id=${linkId}`),
   {
     method: "DELETE",

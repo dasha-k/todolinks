@@ -1,7 +1,7 @@
 import React, { useMemo, useState, useEffect } from 'react';
 
 import fetchLinks from './fetchLinks';
-import { getLinks, updateLink, deleteLink, createLink, filterLinks } from './requests';
+import { getLinks, patchLink, removeLink, createLink, filterLinks } from './requests';
 
 const useLinks = () => {
     // logic to update/delete/create links
@@ -24,13 +24,38 @@ const useLinks = () => {
         }
     }
 
-    
+    const deleteLink = async (linkId) => {
+        console.log('call delete link', linkId);
+        const rollbackState = [...links];
+        setLinks(links => (links.filter(link => link._id !== linkId)));
+        const request = removeLink(linkId);
+        const [result, error] = await fetchLinks(request);
+        if(result) {
+            console.log('deleted successfully');
+        }
+        if(error) {
+            setLinks(rollbackState);
+        }
+    }
+
+    const updateLink = async (linkId, payload) => {
+        console.log('call update link', linkId);
+        const rollbackState = [...links];
+        setLinks(links => (links.map(link => link._id === linkId ? payload : link)));
+        const request = patchLink(linkId, payload);
+        const [result, error] = await fetchLinks(request);
+        if(result) {
+            console.log('updated successfully');
+        }
+        if(error) {
+            setLinks(rollbackState);
+        }
+    }
 
     console.log('inside useLinks', links);
     const request = useMemo(() => getLinks(), []);
 
     useEffect(async () => {
-        
         console.log('inside use effect', request);
         const [results, error] = await fetchLinks(request);
         console.log('links-->', results);
@@ -64,7 +89,7 @@ const useLinks = () => {
 
     
     //return useApiResult(request);
-    return [links, error, addLink];
+    return [links, error, addLink, deleteLink, updateLink];
 }
 
 export default useLinks;

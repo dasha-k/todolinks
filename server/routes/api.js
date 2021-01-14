@@ -18,12 +18,12 @@ router.post('/link',
 
 router.delete('/link',
     linksController.deleteLink,
-    (req, res) => res.sendStatus(200)
+    (req, res) => res.status(200).json({})
 );
 
 router.patch('/link',
     linksController.updateLink,
-    (req, res) => res.sendStatus(200)
+    (req, res) => res.status(200).json({})
 );
 
 module.exports = router;

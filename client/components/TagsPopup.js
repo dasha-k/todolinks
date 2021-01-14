@@ -3,7 +3,7 @@ import React from 'react';
 import {tags} from './TagsView';
 import Tag from './Tag';
 
-const TagsModal = ({linkId, tagId, updateLinkWithTag}) => (
+const TagsModal = ({tagId, updateLinkWithTag}) => (
   <div className="tagsPopup">
       <ul className="tagsPopup__list">
         {tags.map((el) => {
