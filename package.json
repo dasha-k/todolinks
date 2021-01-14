@@ -6,8 +6,7 @@
   "scripts": {
     "start": "NODE_ENV=production node server/server.js",
     "build": "NODE_ENV=production webpack",
-    "dev": "NODE_ENV=development webpack serve & nodemon server/server.js",
-    "seed": "psql -d postgres://nyoejflp:vSvFqql_uN03I4gkh95uYbEulR7lIjGn@suleiman.db.elephantsql.com:5432/nyoejflp -f server/schema/dbNewSchema.sql"
+    "dev": "NODE_ENV=development webpack serve & nodemon server/server.js"
   },
   "nodemonConfig": {
     "ignore": [
