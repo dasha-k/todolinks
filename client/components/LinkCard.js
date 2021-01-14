@@ -4,7 +4,7 @@ import DeleteSvg from './svg/close.svg';
 import TagsPopup from './TagsPopup';
 import Tag from './Tag';
 
-import {useToggle} from '../helpers';
+import useToggle from '../utils/useToggle';
 
 const LinkCard = ({link_name, link_src, tag_id, tag_color, tag_name, _id, optimistic}) => {
   const [isModal, toggleIsModal] = useToggle();

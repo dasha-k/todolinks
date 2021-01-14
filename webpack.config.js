@@ -2,7 +2,7 @@ const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
-    entry: './client/index.js',
+    entry: ['@babel/polyfill','./client/index.js'],
     output: {
         path: path.resolve(__dirname, 'build'),
         filename: 'bundle.js'
@@ -38,7 +38,7 @@ module.exports = {
                     'css-loader',
                     'sass-loader',
                 ],
-            },
+            }
         ]
     },
     plugins: [

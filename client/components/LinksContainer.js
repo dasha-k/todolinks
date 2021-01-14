@@ -1,19 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
-import LinksView from './LinksView';
 import TagsView from './TagsView';
+import LinkCard from './LinkCard';
+import AddLink from './AddLink';
+
+import useLinks from '../utils/useLinks';
 
 export const TagsContext = React.createContext();
 
 const LinksContainer = () => {
-    const [currTag, setCurrTag] = useState(1);
-    const changeTag = (tagId) => setCurrTag(tagId);
-
-    const [links, setLinks] = useState(null);
-    const [error, setError] = useState(false);
-
-    let statusCode = 200;
-
+    
+    //const changeTag = (tagId) => setCurrTag(tagId);
+    const [links, error, addLink] = useLinks();
+    
     const handleOptimisticUpdate = (cardTitle) => {
         // run before database updated
         // put new card in state with 0 id
@@ -36,40 +35,23 @@ const LinksContainer = () => {
             
         setCards(updatedCards);
     }
-
-    useEffect(() => {
-        console.log('container mount', currTag);
-        let url = currTag === 1 ? '/api/' : `/api/?tag=${currTag}`;
-    
-        fetch(url)
-            .then((res) => { 
-                statusCode = res.status;
-                return res.json()
-            })
-            .then((data) => {
-                console.log('data', data);
-                // return this.setState({
-                // characters,
-                // fetchedChars: true
-                // });
-                if(statusCode === 200) {
-                    return setLinks(data);
-                } else {
-                    return setError(true);
-                }
-            })
-            .catch((err) => {
-                console.log('Cards.useEffect: get characters: ERROR: ', err);
-                return setError(true);
-            });
-    }, [currTag]);
-
-    console.log('current tag is', currTag);
-
+    const currTag = 1; // delete later
+    console.log('links', links, 'error -->', error);
     return (
-        <TagsContext.Provider value={{currTag, changeTag, links, setLinks}}>
-            <TagsView currTag={currTag} changeTag={changeTag} />
-            {links ? <LinksView links={links} /> : <div>loading...</div>}
+        <TagsContext.Provider value={{currTag}}>
+            <TagsView 
+                //currTag={currTag} 
+                //changeTag={changeTag} 
+            />
+            {links
+                ? <div className='cardsContainer'>
+                    <AddLink addLink={addLink}/>
+                    <>
+                        {links.map(link => <LinkCard {...link} key={link._id} optimistic={link._id === 0}/>)}
+                    </>
+                </div>
+                : <div>loading...</div>
+            }
             {error && <div>Something went wrong, we could not fetch your links</div>}
         </TagsContext.Provider>
     )

@@ -5,7 +5,7 @@ const helpers = require('../controllers/helpers');
 
 const router = express.Router();
 
-router.get('/', 
+router.get('/link', 
     linksController.getAll,
     (req, res) => res.status(200).json(res.locals.links)
 );
